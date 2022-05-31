@@ -1,0 +1,77 @@
+version: "3.7"
+x-env: &defaults
+  NODE_ENV: development
+  NODE_PATH:
+  DB_NAME:
+  MONGODB_HOST:
+  MONGODB_PASSWORD:
+  MONGODB_USERNAME:
+services:
+  mongo:
+    container_name: photo-sharing-mongo
+    image: photo-sharing/db
+    build:
+      context: db/
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ./mongo_data
+        target: /data/db
+      - type: bind
+        source: ./db
+        target: /opt/db
+    ports:
+      - 27017:27017
+    environment: *defaults
+  # web:
+  #   stdin_open: true
+  #   container_name: photo-sharing-web
+  #   image: photo-sharing/web
+  #   build:
+  #     context: code-challenge-font-end/
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - type: bind
+  #       source: ./code-challenge-font-end
+  #       target: /opt/app
+  #     - type: tmpfs
+  #       target: /tmp
+  #       tmpfs:
+  #         size: 128000000
+  #     - ./static/environment.js:/usr/share/nginx/html/config.js
+  #   ports:
+  #     - 5000:5000
+
+  #   depends_on:
+  #     - api
+  #   environment:
+  #     PORT: 5000
+  #     <<: *defaults
+  #   command: >
+  #     bash -c "npm run dev"
+
+  api:
+    container_name: photo-sharing-api
+    image: photo-sharing/api
+    build:
+      context: api/
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ./api
+        target: /opt/app
+      - type: tmpfs
+        target: /tmp
+        tmpfs:
+          size: 128000000
+    ports:
+      - 5001:5001
+      - 9228:9228
+
+    depends_on:
+      - mongo
+    environment:
+      <<: *defaults
+      PORT: 5001
+    command: >
+      bash -c "sleep 5 && npm run dev:docker"
