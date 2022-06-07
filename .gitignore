@@ -15,5 +15,5 @@ deployment.yaml
 web/public/env-config.js
 mongo_data
 
-.env
+# .env
 
