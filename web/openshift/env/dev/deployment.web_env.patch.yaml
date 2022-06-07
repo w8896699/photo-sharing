@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: photo-sharing-web
+spec:
+  template:
+    spec:
+      containers:
+        - name: photo-sharing-web
+          env:
+            - name: REACT_APP_ASSET_URL
+              value: https://photo-sharing-api-bcb254-dev.apps.clab.devops.gov.bc.ca
+            - name: REACT_APP_BACKEND_URL
+              value: https://photo-sharing-api-bcb254-dev.apps.clab.devops.gov.bc.ca/api

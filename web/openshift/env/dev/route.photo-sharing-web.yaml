@@ -1,0 +1,6 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: photo-sharing-web
+spec:
+  host: photo-sharing-web--bcb254-dev.apps.clab.devops.gov.bc.ca

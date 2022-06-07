@@ -6,6 +6,8 @@ x-env: &defaults
   MONGODB_HOST:
   MONGODB_PASSWORD:
   MONGODB_USERNAME:
+  REACT_APP_BACKEND_URL:
+  REACT_APP_ASSET_URL:
 services:
   mongo:
     container_name: photo-sharing-mongo
@@ -23,32 +25,31 @@ services:
     ports:
       - 27017:27017
     environment: *defaults
-  # web:
-  #   stdin_open: true
-  #   container_name: photo-sharing-web
-  #   image: photo-sharing/web
-  #   build:
-  #     context: code-challenge-font-end/
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - type: bind
-  #       source: ./code-challenge-font-end
-  #       target: /opt/app
-  #     - type: tmpfs
-  #       target: /tmp
-  #       tmpfs:
-  #         size: 128000000
-  #     - ./static/environment.js:/usr/share/nginx/html/config.js
-  #   ports:
-  #     - 5000:5000
+  web:
+    stdin_open: true
+    container_name: photo-sharing-web
+    image: photo-sharing/web
+    build:
+      context: web/
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ./web
+        target: /opt/app
+      - type: tmpfs
+        target: /tmp
+        tmpfs:
+          size: 128000000
+    ports:
+      - 2015:2015
 
-  #   depends_on:
-  #     - api
-  #   environment:
-  #     PORT: 5000
-  #     <<: *defaults
-  #   command: >
-  #     bash -c "npm run dev"
+    depends_on:
+      - api
+    environment:
+      PORT: 2015
+      <<: *defaults
+    command: >
+      bash -c "npm run dev"
 
   api:
     container_name: photo-sharing-api

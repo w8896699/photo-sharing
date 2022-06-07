@@ -12,8 +12,8 @@ deployment.yaml
 **/*.secrets
 **/*.ini
 .DS_Store
-web/.env.production
-web/.env
 web/public/env-config.js
 mongo_data
+
+.env
 
